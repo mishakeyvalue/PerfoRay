@@ -49,6 +49,12 @@ namespace PerfoRay
 
             app.UseStaticFiles();
 
+            app.Map("/ws", wsApp =>
+            {
+                wsApp.UseWebSockets();
+                wsApp.Use(WebSocketHandler.Acceptor);
+            });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
