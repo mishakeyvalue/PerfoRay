@@ -29,5 +29,8 @@
   <ItemGroup>
     <Folder Include="wwwroot\freelancer-template\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BLL\BLL.csproj" />
+  </ItemGroup>
 
 </Project>
