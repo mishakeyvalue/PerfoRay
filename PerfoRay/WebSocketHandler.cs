@@ -8,6 +8,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using BLL;
+using System.Linq;
 
 namespace PerfoRay
 {
@@ -21,6 +22,7 @@ namespace PerfoRay
             _socket = socket;
         }
 
+        public static ScansManager Manager { get; set; }
 
         public static async Task Acceptor(HttpContext httpContext, Func<Task> next)
         {
@@ -41,9 +43,13 @@ namespace PerfoRay
             Scanner sk = new Scanner();
             sk.MeasuringStarted += SendMeasureStartedMsg;
             sk.MeasuringEnded += SendMeasureEndedMsg;
-            var result = sk.ScanWebsite(args.Uri);
+            ScanResult result = sk.ScanWebsite(args.Uri);
+
+            result.Pages.OrderByDescending(el => el.DownloadTime);
+            Manager.Create(result);
 
             await sendJsonAsync(result);
+
         }
 
         private void SendMeasureEndedMsg(object sender, DocumentResult e)

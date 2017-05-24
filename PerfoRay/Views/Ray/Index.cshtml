@@ -1,5 +1,8 @@
-﻿
-    <!-- Navigation -->
+﻿@model IEnumerable<BLL.ScanResult>
+@{
+    ViewData["Title"] = "Main";
+}
+<!-- Navigation -->
 <nav id="mainNav" class="navbar navbar-default navbar-fixed-top navbar-custom">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -19,7 +22,7 @@
                     <a href="#portfolio">Scan it!</a>
                 </li>
                 <li class="page-scroll">
-                    <a href="#about">About</a>
+                    <a href="#about">History</a>
                 </li>
                 <li class="page-scroll">
                     <a href="#contact">Contact</a>
@@ -31,7 +34,7 @@
     <!-- /.container-fluid -->
 </nav>
 
-    <!-- Header -->
+<!-- Header -->
 <header>
     <div class="container" id="maincontent" tabindex="-1">
         <div class="row">
@@ -47,7 +50,7 @@
     </div>
 </header>
 
-    <!-- Portfolio Grid Section -->
+<!-- Portfolio Grid Section -->
 <section id="portfolio">
     <div class="container">
         <div class="row">
@@ -56,7 +59,7 @@
                 <hr class="star-primary">
 
                 <div class="form-inline">
-                    <input id="uri" type="url" class="form-control" value="http://rozetka.com.ua/"/>
+                    <input id="uri" type="url" class="form-control" value="http://rozetka.com.ua/" />
                     <button id="start_scanning" type="submit" class="btn btn-success">Go!</button>
 
 
@@ -66,11 +69,7 @@
         </div>
         <div id="processTable" hidden class="row">
             <div class="col-lg-12 col-md-12">
-                <div class="panel panel-default">
-                    <!-- Default panel contents -->
-                    <div class="panel-heading">Site perfomance</div>
-                    <div class="panel-body">
-                    </div>
+
 
                     <!-- Table -->
                     <table class="table">
@@ -81,13 +80,85 @@
                             <th width="15%">Document size</th>
                         </tr>
                         <tbody id="tableBody">
-                            <tr id="sampleRow" hidden>
-
-                            </tr>
+                            <tr id="sampleRow" hidden></tr>
                         </tbody>
                     </table>
                 </div>
 
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="success" id="about">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h2>History</h2>
+            <hr class="star-light">
+        </div>
+
+        @foreach (var result in Model)
+            {
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+
+                    <div class="panel-heading">
+                        <a class="btn btn-primary" data-toggle="collapse" href="#@result.Id.ToString()" aria-expanded="false" aria-controls="collapseExample">
+                            @result.BaseAddress
+                        </a> 	&#8592;     Press here! ----   Scanned at @result.ScannedAt
+                    </div>
+                    <div class="panel-body">
+                    </div>
+                    <div id="@result.Id.ToString()" class="collapse">
+                        <table  class="table myTable">
+                            <thead>
+                                <tr>
+                                    <th width="10%">Status code</th>
+                                    <th>URI</th>
+                                    <th width="20%">Download time</th>
+                                    <th width="15%">Document size</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < result.Pages.Count; i++)
+                                {
+                                    <tr>
+
+                                        <td>@result.Pages.ElementAt(i).StatusCode</td>
+                                        <td>@result.Pages.ElementAt(i).Uri</td>
+                                        <td>@result.Pages.ElementAt(i).DownloadTime SEC</td>
+                                        <td>@(result.Pages.ElementAt(i).Size * 1000000) MB </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+</section>
+
+
+<section id="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2>Contact Me</h2>
+                <hr class="star-primary">
+                <h3>Programming is my passion</h3>
+                <h4>I wrote a lot of code for myself!</h4>
+                <h4>Check it out in my github profile!</h4>
+                <a href="https://github.com/mitutee" class="fa fa-5x fa-github">
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
             </div>
         </div>
     </div>

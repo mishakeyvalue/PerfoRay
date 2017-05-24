@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using DAL;
+using BLL;
+using MongoDB.Bson;
 
 namespace PerfoRay
 {
@@ -29,6 +32,13 @@ namespace PerfoRay
         {
             // Add framework services.
             services.AddMvc();
+            string cs = Configuration.GetConnectionString("Mongo");
+            MongoRepository<ScanResult, ObjectId> repo
+                = new MongoRepository<ScanResult, ObjectId>(cs);
+
+            ScansManager manager = new ScansManager(repo);
+            services.AddSingleton(manager);
+            WebSocketHandler.Manager = manager;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

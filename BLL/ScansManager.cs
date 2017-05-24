@@ -4,6 +4,7 @@ using System.Text;
 using DAL;
 using DAL.Interfaces;
 using MongoDB.Bson;
+using System.Linq;
 
 namespace BLL
 {
@@ -22,7 +23,7 @@ namespace BLL
 
         public IEnumerable<ScanResult> GetAll()
         {
-            return _repo.GetAll();
+            return _repo.GetAll().OrderByDescending( el => el.ScannedAt);
         }
     }
 }
