@@ -46,16 +46,24 @@ namespace BLL
             OnMeasuringStarted(uri);
             sw.Start();
 
-            HttpResponseMessage response = _client.GetAsync(uri).Result;
+            HttpResponseMessage response;
+            try
+            {
+                response = _client.GetAsync(uri).Result;
+            }
+            catch (Exception e)
+            {
 
+                return new DocumentResult() { Exception = e };
+            }
             sw.Stop();
-            OnMeasuringEnded(uri, sw.Elapsed);
-
+            
             DocumentResult result = new DocumentResult()
             {
                 Uri = uri,
                 ScannedAt = DateTime.Now,
                 StatusCode = response.StatusCode,
+                Size = response.Content.ReadAsByteArrayAsync().Result.Length,
                 DownloadTime = sw.Elapsed
             };
 
@@ -67,6 +75,7 @@ namespace BLL
             }
             else result.Type = DocType.Asset;
 
+            OnMeasuringEnded(result);
 
             sw.Reset();
             return result;
@@ -97,13 +106,21 @@ namespace BLL
             return uri.Host == _baseUri.Host;
         }
 
-        private void OnMeasuringEnded(Uri uri, TimeSpan elapsed)
+        #region Events
+        public EventHandler<Uri> MeasuringStarted;
+        public EventHandler<DocumentResult> MeasuringEnded;
+
+        private void OnMeasuringEnded(DocumentResult result)
         {
+            MeasuringEnded?.Invoke(this, result);
         }
 
         private void OnMeasuringStarted(Uri uri)
         {
+            MeasuringStarted?.Invoke(this, uri);
         }
+
+        #endregion
 
         public void Dispose()
         {

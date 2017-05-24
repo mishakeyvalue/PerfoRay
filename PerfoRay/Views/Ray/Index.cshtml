@@ -16,7 +16,7 @@
                     <a href="#page-top"></a>
                 </li>
                 <li class="page-scroll">
-                    <a href="#portfolio">Analyse it!</a>
+                    <a href="#portfolio">Scan it!</a>
                 </li>
                 <li class="page-scroll">
                     <a href="#about">About</a>
@@ -52,71 +52,43 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
-                <h2>RayIt!</h2>
+                <h2>Scan it!</h2>
                 <hr class="star-primary">
+
+                <div class="form-inline">
+                    <input id="uri" type="url" class="form-control" value="http://rozetka.com.ua/"/>
+                    <button id="start_scanning" type="submit" class="btn btn-success">Go!</button>
+
+
+                </div>
+
             </div>
         </div>
-        @*<div class="row">
-            <div class="col-sm-4 portfolio-item">
-                <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
-                    <div class="caption">
-                        <div class="caption-content">
-                            <i class="fa fa-search-plus fa-3x"></i>
-                        </div>
+        <div id="processTable" hidden class="row">
+            <div class="col-lg-12 col-md-12">
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">Site perfomance</div>
+                    <div class="panel-body">
                     </div>
-                    <img src="img/portfolio/cabin.png" class="img-responsive" alt="Cabin">
-                </a>
+
+                    <!-- Table -->
+                    <table class="table">
+                        <tr>
+                            <th width="10%">Status code</th>
+                            <th>URI</th>
+                            <th width="20%">Download time</th>
+                            <th width="15%">Document size</th>
+                        </tr>
+                        <tbody id="tableBody">
+                            <tr id="sampleRow" hidden>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
-            <div class="col-sm-4 portfolio-item">
-                <a href="#portfolioModal2" class="portfolio-link" data-toggle="modal">
-                    <div class="caption">
-                        <div class="caption-content">
-                            <i class="fa fa-search-plus fa-3x"></i>
-                        </div>
-                    </div>
-                    <img src="img/portfolio/cake.png" class="img-responsive" alt="Slice of cake">
-                </a>
-            </div>
-            <div class="col-sm-4 portfolio-item">
-                <a href="#portfolioModal3" class="portfolio-link" data-toggle="modal">
-                    <div class="caption">
-                        <div class="caption-content">
-                            <i class="fa fa-search-plus fa-3x"></i>
-                        </div>
-                    </div>
-                    <img src="img/portfolio/circus.png" class="img-responsive" alt="Circus tent">
-                </a>
-            </div>
-            <div class="col-sm-4 portfolio-item">
-                <a href="#portfolioModal4" class="portfolio-link" data-toggle="modal">
-                    <div class="caption">
-                        <div class="caption-content">
-                            <i class="fa fa-search-plus fa-3x"></i>
-                        </div>
-                    </div>
-                    <img src="img/portfolio/game.png" class="img-responsive" alt="Game controller">
-                </a>
-            </div>
-            <div class="col-sm-4 portfolio-item">
-                <a href="#portfolioModal5" class="portfolio-link" data-toggle="modal">
-                    <div class="caption">
-                        <div class="caption-content">
-                            <i class="fa fa-search-plus fa-3x"></i>
-                        </div>
-                    </div>
-                    <img src="img/portfolio/safe.png" class="img-responsive" alt="Safe">
-                </a>
-            </div>
-            <div class="col-sm-4 portfolio-item">
-                <a href="#portfolioModal6" class="portfolio-link" data-toggle="modal">
-                    <div class="caption">
-                        <div class="caption-content">
-                            <i class="fa fa-search-plus fa-3x"></i>
-                        </div>
-                    </div>
-                    <img src="img/portfolio/submarine.png" class="img-responsive" alt="Submarine">
-                </a>
-            </div>
-        </div>*@
+        </div>
     </div>
 </section>

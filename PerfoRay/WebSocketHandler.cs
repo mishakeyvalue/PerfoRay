@@ -7,6 +7,7 @@ using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using BLL;
 
 namespace PerfoRay
 {
@@ -35,13 +36,32 @@ namespace PerfoRay
 
         private async Task processAsync(CancellationToken ct = default(CancellationToken))
         {
-            var data = await receiveJsonAsync<StartScaningArgs>(ct);
+            StartScaningArgs args = await receiveJsonAsync<StartScaningArgs>(ct);
 
-            await sendJsonAsync(new
+            Scanner sk = new Scanner();
+            sk.MeasuringStarted += SendMeasureStartedMsg;
+            sk.MeasuringEnded += SendMeasureEndedMsg;
+            var result = sk.ScanWebsite(args.Uri);
+
+            await sendJsonAsync(result);
+        }
+
+        private void SendMeasureEndedMsg(object sender, DocumentResult e)
+        {
+            sendJsonAsync(new
             {
-                Type = 1,
-                Comment = "Oh yeah, webSockets works!"
-            });
+                Type = "measure_ended",
+                Result = e
+            }).Wait();
+        }
+
+        private void SendMeasureStartedMsg(object sender, Uri e)
+        {
+             sendJsonAsync(new
+            {
+                Type = "measure_started",
+                Uri = e.AbsoluteUri,
+            }).Wait();
         }
 
         private async Task<T> receiveJsonAsync<T>(CancellationToken ct = default(CancellationToken))
