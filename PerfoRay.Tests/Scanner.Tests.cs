@@ -11,14 +11,13 @@ namespace PerfoRay.Tests
         {
             // Arrange
             string invalidUri = "invalid_string";
-            Scanner sc = new Scanner(invalidUri);
             // Act
 
             // Assert
-            Assert.Throws(typeof(ArgumentException),  () =>  sc.Scan());
+            Assert.Throws(typeof(ArgumentException),  () => new Scanner(invalidUri));
         }
 
-        [Fact]
+        [Fact(Skip = "Long run; already tested;")]
         public void StartScanning_ValidUri_ReturnsScanResult()
         {
             // Arrange
@@ -28,6 +27,29 @@ namespace PerfoRay.Tests
             ScanResult res = sc.Scan();
             // Assert
             Assert.NotNull(res);
+        }
+
+        [Fact]
+        public void AddingAvrgTimeIsCorrect()
+        {
+            // Arrange
+            ScanResult res = new ScanResult(new Uri("http://mock.com"));
+
+            TimeSpan ts1 = new TimeSpan(0, 1, 0);
+            TimeSpan ts2 = new TimeSpan(0, 3, 0);
+            TimeSpan avg = new TimeSpan(0, 2, 0); //TimeSpan.FromMilliseconds((ts1 + ts2).TotalMilliseconds  / 2);
+
+            DocumentResult d_res1 = new DocumentResult() { DownloadTime = ts1 };
+            DocumentResult d_res2 = new DocumentResult() { DownloadTime = ts2 };
+
+            // Act
+            res.AddDocumentResult(d_res1);
+            res.AddDocumentResult(d_res2);
+
+            // Assert
+            Assert.Equal(avg, res.AvgDownloadTime);
+
+
         }
 
     }

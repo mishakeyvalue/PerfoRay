@@ -10,7 +10,7 @@ namespace PerfoRay.Tests
 {
     public class MongoRepositoryTests
     {
-        [Fact]
+        [Fact(Skip = "Long run; already tested;")]
         public void AddingToScanned_GetAll_ContainsScanned()
         {
             // Arrange

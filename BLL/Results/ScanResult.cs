@@ -16,7 +16,7 @@ namespace BLL
 
         public DateTime ScannedAt { get; set; }
 
-        public TimeSpan AvgDownloadTime { get; private set; }
+        public TimeSpan AvgDownloadTime { get; private set; } = new TimeSpan(0);
 
         public ICollection<DocumentResult> Pages { get; set; }
         public ICollection<DocumentResult> Assets { get; set; }
@@ -32,7 +32,6 @@ namespace BLL
 
         public void AddDocumentResult(DocumentResult result)
         {
-            AvgDownloadTime = TimeSpan.FromMilliseconds((AvgDownloadTime + result.DownloadTime).Milliseconds / (double) (Pages.Count + Assets.Count + 1));
             switch (result.Type)
             {
                 case DocType.HtmlPage:
@@ -41,7 +40,13 @@ namespace BLL
                 case DocType.Asset:
                     Assets.Add(result);
                     break;
+
+
             }
+            TimeSpan totalTime = AvgDownloadTime + result.DownloadTime;
+            double totalMiliSec = totalTime.TotalMilliseconds;
+            AvgDownloadTime = TimeSpan.FromMilliseconds( totalMiliSec / (Pages.Count + Assets.Count));
+
         }
     }
 }
