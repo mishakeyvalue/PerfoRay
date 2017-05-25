@@ -64,7 +64,7 @@ function insertRow(data) {
     sample.append('<td>' + '<i class="fa fa-spinner fa-spin" style="font-size:24px"></i>' + '</td>')
     sample.append('<td>' + '<i class="fa fa-spinner fa-spin" style="font-size:24px"></i>' + '</td>')
 
-    $("#processTable").find('tbody').append(sample)
+    $("#processTable").find('#tableBody').append(sample)
 
 }
 // minified MD5 hash algo
