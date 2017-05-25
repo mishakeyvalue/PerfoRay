@@ -16,9 +16,9 @@ namespace BLL
             _repo = repo;
         }
 
-        public void Create(ScanResult result)
+        public ObjectId Create(ScanResult result)
         {
-            _repo.Add(result);
+            return _repo.Add(result);
         }
 
         public IEnumerable<ScanResult> GetAll()

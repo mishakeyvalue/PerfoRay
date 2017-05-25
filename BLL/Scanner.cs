@@ -9,23 +9,53 @@ using System.Threading.Tasks;
 
 namespace BLL
 {
+    /// <summary>
+    /// Main class for scanning web sites
+    /// </summary>
     public class Scanner : IDisposable
     {
+        #region Fields and properties
         private HttpClient _client { get; set; } = new HttpClient();
-        private const int PAGES_LIMIT = 100;
+
+        /// <summary>
+        /// Limit of the pages to scan
+        /// </summary>
+        private const int PAGES_LIMIT = 20;
+
         private Stopwatch sw = new Stopwatch();
+
+        /// <summary>
+        /// Base URI where we start
+        /// </summary>
         private Uri _baseUri;
 
+        /// <summary>
+        /// Queue of URIs to scan
+        /// </summary>
         private Queue<Uri> _uriQueue { get; } = new Queue<Uri>();
-        private HashSet<Uri> _scanned = new HashSet<Uri>();
 
+        /// <summary>
+        /// Collection to store already processed URIs 
+        /// </summary>
+        private ICollection<Uri> _scanned = new HashSet<Uri>();
+        #endregion
 
-        public ScanResult ScanWebsite(string website)
+        public Scanner(string URI)
         {
-            if(!Uri.TryCreate(website, UriKind.Absolute, out  _baseUri))
+            if (!Uri.TryCreate(URI, UriKind.Absolute, out _baseUri))
             {
                 throw new ArgumentException("Invalid URI.");
             }
+        }
+
+        /// <summary>
+        /// Entry point for scanning process
+        /// </summary>
+        /// <param name="website"> URI of website to scan </param>
+        /// <returns> Summary of scanning process </returns>
+        public ScanResult Scan()
+        {
+
             ScanResult result = new ScanResult(_baseUri);
             _uriQueue.Enqueue(_baseUri);
             _scanned.Add(_baseUri);
@@ -82,6 +112,7 @@ namespace BLL
         }
 
         private static string anchorSelector = "a";
+
         private void parseResponse(HttpResponseMessage response)
         {
             HtmlParser parser = new HtmlParser();

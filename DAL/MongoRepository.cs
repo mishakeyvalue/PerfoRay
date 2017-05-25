@@ -8,6 +8,11 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
+    /// <summary>
+    /// Mongo implementation of <see cref="IRepository{TEntity, TIdentifier}"/> interface
+    /// </summary>
+    /// <typeparam name="TEntity"> Type of entity to store in a repo ( !! must implement <see cref="IEntity{TIdentifier}"/> !! ) </typeparam>
+    /// <typeparam name="TIdentifier"> Type of key in that entity </typeparam>
     public class MongoRepository<TEntity, TIdentifier> : IRepository<TEntity, TIdentifier> where TEntity : class, IEntity<TIdentifier>
     {
 

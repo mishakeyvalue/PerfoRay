@@ -9,9 +9,14 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using BLL;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace PerfoRay
 {
+    /// <summary>
+    /// Handles incoming ws:// connections
+    /// Main controller
+    /// </summary>
     public class WebSocketHandler
     {
         private WebSocket _socket { get; }
@@ -24,6 +29,12 @@ namespace PerfoRay
 
         public static ScansManager Manager { get; set; }
 
+        /// <summary>
+        /// Start point for <see cref="WebSocketHandler"/> pipeline
+        /// </summary>
+        /// <param name="httpContext"></param>
+        /// <param name="next"></param>
+        /// <returns></returns>
         public static async Task Acceptor(HttpContext httpContext, Func<Task> next)
         {
             if (!httpContext.WebSockets.IsWebSocketRequest) return;
@@ -40,10 +51,10 @@ namespace PerfoRay
         {
             StartScaningArgs args = await receiveJsonAsync<StartScaningArgs>(ct);
 
-            Scanner sk = new Scanner();
-            sk.MeasuringStarted += SendMeasureStartedMsg;
-            sk.MeasuringEnded += SendMeasureEndedMsg;
-            ScanResult result = sk.ScanWebsite(args.Uri);
+            Scanner sk = new Scanner(args.Uri);
+            sk.MeasuringStarted += sendMeasureStartedMsg;
+            sk.MeasuringEnded += sendMeasureEndedMsg;
+            ScanResult result = sk.Scan();
 
             result.Pages.OrderByDescending(el => el.DownloadTime);
             Manager.Create(result);
@@ -52,7 +63,7 @@ namespace PerfoRay
 
         }
 
-        private void SendMeasureEndedMsg(object sender, DocumentResult e)
+        private void sendMeasureEndedMsg(object sender, DocumentResult e)
         {
             sendJsonAsync(new
             {
@@ -61,7 +72,7 @@ namespace PerfoRay
             }).Wait();
         }
 
-        private void SendMeasureStartedMsg(object sender, Uri e)
+        private void sendMeasureStartedMsg(object sender, Uri e)
         {
              sendJsonAsync(new
             {

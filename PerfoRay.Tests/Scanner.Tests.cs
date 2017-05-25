@@ -10,22 +10,22 @@ namespace PerfoRay.Tests
         public void StartScanning_InvalidUir_TrowsEx()
         {
             // Arrange
-            Scanner sc = new Scanner();
             string invalidUri = "invalid_string";
+            Scanner sc = new Scanner(invalidUri);
             // Act
 
             // Assert
-            Assert.Throws(typeof(ArgumentException),  () =>  sc.ScanWebsite(invalidUri));
+            Assert.Throws(typeof(ArgumentException),  () =>  sc.Scan());
         }
 
         [Fact]
         public void StartScanning_ValidUri_ReturnsScanResult()
         {
             // Arrange
-            Scanner sc = new Scanner();
             string validUri = "https://mdbootstrap.com";
+            Scanner sc = new Scanner(validUri);
             // Act
-            ScanResult res = sc.ScanWebsite(validUri);
+            ScanResult res = sc.Scan();
             // Assert
             Assert.NotNull(res);
         }

@@ -14,7 +14,6 @@ namespace PerfoRay.Tests
         public void AddingToScanned_GetAll_ContainsScanned()
         {
             // Arrange
-            Scanner sc = new Scanner();
             string uri = "https://stackoverflow.com";
             string cs = "mongodb://mitutee:Hardware2017@ds157500.mlab.com:57500/storeage";
             MongoRepository<ScanResult, ObjectId> repo

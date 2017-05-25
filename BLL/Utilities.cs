@@ -6,20 +6,19 @@ namespace BLL
 {
     class Utilities
     {
-        public static bool IsHtmlMimeType(string mimeType)
-        {
-            string[] mimeTypes =
-            {
+        static string[] mimeTypes =
+{
                 "text/html",
                 "application/xhtml+xml"
             };
 
+        public static bool IsHtmlMimeType(string mimeType)
+        {
             foreach (var type in mimeTypes)
             {
                 if (string.Equals(mimeType, type, StringComparison.OrdinalIgnoreCase))
                     return true;
             }
-
             return false;
         }
     }
