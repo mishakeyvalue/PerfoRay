@@ -1,4 +1,5 @@
-﻿using AngleSharp.Dom.Html;
+﻿using AngleSharp;
+using AngleSharp.Dom.Html;
 using AngleSharp.Parser.Html;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,8 @@ namespace BLL
         /// </summary>
         private Uri _baseUri;
 
+        private Url _baseUrl;
+
         /// <summary>
         /// Queue of URIs to scan
         /// </summary>
@@ -46,6 +49,8 @@ namespace BLL
             {
                 throw new ArgumentException("Invalid URI.");
             }
+
+            _baseUrl = new Url(URI);
         }
 
         /// <summary>
@@ -120,21 +125,39 @@ namespace BLL
             var anchors = parser.Parse(html).QuerySelectorAll(anchorSelector).OfType<IHtmlAnchorElement>();
             foreach(var anchor in anchors)
             {
+
                 Uri link = null;
-                if (Uri.TryCreate(anchor.Href,UriKind.Absolute, out link))
+                List<string> hrefs = new List<string>();
+                hrefs.Add(anchor.Href);
+
+                if (anchor.Href.Length > 8 && anchor.Href.Contains("about://")) hrefs.Add(anchor.Href.Substring(8));
+                
+                foreach (string h in hrefs)
                 {
-                    if (isSameHost(link) && !_uriQueue.Contains(link) && !_scanned.Contains(link))
+                    if (Uri.TryCreate(getAbsoluteUrl(_baseUrl, h), UriKind.RelativeOrAbsolute, out link))
                     {
-                        _uriQueue.Enqueue(link);
+                        if (isSameHost(link) && !_uriQueue.Contains(link) && !_scanned.Contains(link))
+                        {
+                            _uriQueue.Enqueue(link);
+                        }
                     }
                 }
-
             }
+        }
+        private string getAbsoluteUrl(Url baseUrl, string url)
+        {
+            var u = new Url(url);
+            if (u.IsAbsolute)
+                return u.Href;
+
+            var fullUrl = new Url(baseUrl, url);
+            return fullUrl.Href;
         }
 
         private bool isSameHost(Uri uri)
         {
-            return uri.Host == _baseUri.Host;
+            return _baseUrl.Host == new Url(uri.AbsoluteUri).Host;
+
         }
 
         #region Events

@@ -60,7 +60,6 @@ namespace PerfoRay
             Manager.Create(result);
 
             await sendJsonAsync(result);
-
         }
 
         private void sendMeasureEndedMsg(object sender, DocumentResult e)
